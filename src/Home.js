@@ -2,11 +2,11 @@ import { ScrollView, TouchableOpacity, Button, Modal, StyleSheet, Text, View, St
 import { Dimensions } from 'react-native'; //나중에 전역변수로 바꾸기
 import React, { useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import getTime from './functions/getTime';
+import getTime from '../functions/getTime';
 import { Switch } from 'react-native';
 import * as Notifications from 'expo-notifications';
 
-import getEndTime from './functions/getEndTime';
+import getEndTime from '../functions/getEndTime';
 import create from 'zustand'
 
 const useBearStore = create((set) => ({

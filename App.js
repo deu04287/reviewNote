@@ -8,16 +8,16 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 // ///////////////////////
-import Home from './Home';
-import WritePage from './WritePage';
-import EditPage from './EditPage';
+import Home from './src/Home';
+import WritePage from './src/WritePage';
+import EditPage from './src/EditPage';
 
-import WriteModal from './WriteModal';
-import EditModal from './EditModal';
-import AlarmModal from './AlarmModal';
+import WriteModal from './src/WriteModal';
+import EditModal from './src/EditModal';
+// import AlarmModal from './AlarmModal';
 
-import TimeSettingPage from './TimeSettingPage';
-import Test from './Test';
+// import TimeSettingPage from './TimeSettingPage';
+// import Test from './Test';
 
 import * as Notifications from 'expo-notifications';
 
@@ -41,9 +41,9 @@ export default function App() {
         <Stack.Screen name="Home" component={Home} />
         <Stack.Screen name="WritePage" component={WritePage} />
         <Stack.Screen name="EditPage" component={EditPage} />
-        <Stack.Screen name="TimeSettingPage" component={TimeSettingPage} />
+        {/* <Stack.Screen name="TimeSettingPage" component={TimeSettingPage} /> */}
         
-        <Stack.Screen name="Test" component={Test} />
+        {/* <Stack.Screen name="Test" component={Test} /> */}
       <Stack.Group >
         <Stack.Screen name="WriteModal" component={WriteModal} options={{ presentation: 'transparentModal' }} />
         <Stack.Screen name="EditModal" component={EditModal} options={{ presentation: 'transparentModal' }} />

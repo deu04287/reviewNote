@@ -7,7 +7,7 @@ import { RadioButton } from 'react-native-paper'; // radio button
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import getTime from './functions/getTime';
+import getTime from '../functions/getTime';
 
 import * as Notifications from 'expo-notifications';
 

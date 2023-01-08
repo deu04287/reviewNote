@@ -5,14 +5,14 @@ import { Dimensions } from 'react-native';//나중에 전역변수로 바꾸기
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import getTime from './functions/getTime';
+import getTime from '../functions/getTime';
 
 import * as Notifications from 'expo-notifications';
 
 import { RadioButton } from 'react-native-paper'; // radio button
 
 import { Switch } from 'react-native';
-import TimeSettingPage from './TimeSettingPage';
+import TimeSettingPage from '../notUsed/TimeSettingPage';
 import WriteModal from './WriteModal';
 
 Notifications.setNotificationHandler({
