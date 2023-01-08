@@ -32,7 +32,6 @@ export default function Home({ navigation }) {
     useEffect(() => {
         // AsyncStorage.clear();
         // setCurrentTime2(getTime());
-        // console.log(getTime());
         AsyncStorage.getAllKeys((err, result) => {
             if (!err) {
                 // console.log("1.알림 보내는거부터 똑바로하기 + 알림의 내용을 title로하기 + 알림 페이지 따로만들기 + 알람취소");
@@ -56,8 +55,6 @@ export default function Home({ navigation }) {
         });
     }, [navigation]);
     useEffect(() => {
-
-        // console.log("visiblemodal useEffect");
         AsyncStorage.getAllKeys((err, result) => {
             if (!err) {
                 setStore(result.reverse());
@@ -93,25 +90,23 @@ export default function Home({ navigation }) {
             <Switch
                 value={isOn}
                 onValueChange={() => {
-                    setIsOn(!isOn);
-                    if(isOn === true){
-                        // console.log(props.identifier);
-                        Notifications.cancelScheduledNotificationAsync(props.identifier);
-                        
-                    }
-                    else{
-                        // console.log(props.onOff);
-                        // console.log(props.number["time"]);
-                        Notifications.scheduleNotificationAsync({
-                            content: {
-                                title: props.number["title"],
-                                body: 'Change sides!',
-                            },
-                            identifier: props.number["time"],
-                            trigger: {
-                                seconds: innerSecond, //onPress가 클릭이 되면 60초 뒤에 알람이 발생합니다.
-                            },
-                        });
+                    if(innerSecond !== 0){
+                        setIsOn(!isOn);
+                        if(isOn === true){
+                            Notifications.cancelScheduledNotificationAsync(props.identifier);   
+                        }
+                        else{
+                            Notifications.scheduleNotificationAsync({
+                                content: {
+                                    title: props.number["title"],
+                                    body: 'Change sides!',
+                                },
+                                identifier: props.number["time"],
+                                trigger: {
+                                    seconds: innerSecond, //onPress가 클릭이 되면 60초 뒤에 알람이 발생합니다.
+                                },
+                            });
+                        }
                     }
                 }}
                 />
