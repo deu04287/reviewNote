@@ -30,8 +30,6 @@ export default function Home({ navigation }) {
     const [currentTime2, setCurrentTime2] = useState(getTime());
 
     useEffect(() => {
-        // AsyncStorage.clear();
-        // setCurrentTime2(getTime());
         AsyncStorage.getAllKeys((err, result) => {
             if (!err) setStore(result.reverse());
         });
@@ -45,8 +43,6 @@ export default function Home({ navigation }) {
         });
     }, [navigation]);
     useEffect(() => {
-
-        // console.log("visiblemodal useEffect");
         AsyncStorage.getAllKeys((err, result) => {
             if (!err) setStore(result.reverse());
         });
@@ -67,34 +63,35 @@ export default function Home({ navigation }) {
                 }
                 else setIsOn(true);
             }
-            }, []);
+        }, []);
 
-            
-            return (
-                <View>
-                <Text>{JSON.stringify(props.number["time"])}</Text>
-            <Switch
-                value={isOn}
-                onValueChange={() => {
-                    if(innerSecond !== 0){
-                        setIsOn(!isOn);
-                        if(isOn === true){
-                            Notifications.cancelScheduledNotificationAsync(props.identifier);   
+        return (
+            <View>
+                <Switch
+                    style={styles.eachSwitchPosition}
+                    value={isOn}
+                    thumbColor="white"
+                    trackColor={{ true: "#19925E"}}
+                    onValueChange={() => {
+                        if (innerSecond !== 0) {
+                            setIsOn(!isOn);
+                            if (isOn === true) {
+                                Notifications.cancelScheduledNotificationAsync(props.identifier);
+                            }
+                            else {
+                                Notifications.scheduleNotificationAsync({
+                                    content: {
+                                        title: props.number["title"],
+                                        body: 'Change sides!',
+                                    },
+                                    identifier: props.number["time"],
+                                    trigger: {
+                                        seconds: innerSecond, //onPress가 클릭이 되면 60초 뒤에 알람이 발생합니다.
+                                    },
+                                });
+                            }
                         }
-                        else{
-                            Notifications.scheduleNotificationAsync({
-                                content: {
-                                    title: props.number["title"],
-                                    body: 'Change sides!',
-                                },
-                                identifier: props.number["time"],
-                                trigger: {
-                                    seconds: innerSecond, //onPress가 클릭이 되면 60초 뒤에 알람이 발생합니다.
-                                },
-                            });
-                        }
-                    }
-                }}
+                    }}
                 />
             </View>
         );
@@ -168,7 +165,7 @@ export default function Home({ navigation }) {
                                 setVisibleModal(!visibleModal);
                             }}
                         >
-                            <Text>edit</Text>
+                            <Text>editt</Text>
                         </Pressable>
                     </View>
                 </View>
