@@ -201,7 +201,7 @@ export default function Home({ navigation }) {
                                 setVisibleModal(!visibleModal);
                             }}
                         >
-                            <Text>edit</Text>
+                            <Text>editt</Text>
                         </Pressable>
                     </View>
                 </View>
