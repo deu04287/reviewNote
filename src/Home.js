@@ -68,7 +68,10 @@ export default function Home({ navigation }) {
         return (
             <View>
                 <Switch
+                    style={styles.eachSwitchPosition}
                     value={isOn}
+                    thumbColor="white"
+                    trackColor={{ true: "#19925E"}}
                     onValueChange={() => {
                         if (innerSecond !== 0) {
                             setIsOn(!isOn);
@@ -107,33 +110,35 @@ export default function Home({ navigation }) {
             </View>
             <ScrollView>
                 {store.map((number, idx) =>
-                    <View key={idx + 10} style={styles.titlelist}>
-                        <View>
-                            <Pressable
-                                onPress={() => {
-                                    navigation.navigate('EditPage', { time: JSON.parse(number)["time"], title: JSON.parse(number)["title"], content: JSON.parse(number)["content"], whenAlarm: JSON.parse(number)["whenAlarm"], endTime: JSON.parse(number)["endTime"], bold: number });
-                                }}
-                                onLongPress={() => {
-                                    setTmpArticle(JSON.stringify(number));
-                                    setVisibleModal(!visibleModal);
-                                }}
-                                style={({ pressed }) => [
-                                    {
-                                        backgroundColor: pressed
-                                            ? 'rgb(210, 230, 255)'
-                                            : 'white'
-                                    }
-                                ]}>
-                                <View >
-                                    <Text>
+                <Pressable
+                key={idx + 10}
+                onPress={() => {
+                    navigation.navigate('EditPage', { time: JSON.parse(number)["time"], title: JSON.parse(number)["title"], content: JSON.parse(number)["content"], whenAlarm: JSON.parse(number)["whenAlarm"], endTime: JSON.parse(number)["endTime"], bold: number });
+                }}
+                onLongPress={() => {
+                    setTmpArticle(JSON.stringify(number));
+                    setVisibleModal(!visibleModal);
+                }}
+                style={({ pressed }) => [
+                    {
+                        backgroundColor: pressed
+                            ? 'rgb(210, 230, 255)'
+                            : 'white'
+                    }
+                ]}>
+                    <View  style={styles.titlelist}>
+                        <View >
+                            
+                                <View style={{width:Dimensions.get('window').width/100*70, height:Dimensions.get('window').height/100*5.5, position:'absolute', left:0, top:-21, backgroundColor:'white'}}>
+                                    <Text >
                                         <Text>• </Text>
                                         <Text style={styles.titlelistfont} key={idx} >{JSON.parse(number)["title"]}</Text>
                                     </Text>
                                 </View>
                                 <EachSwitch onOff={JSON.parse(number)["whenAlarm"]} identifier={JSON.parse(number)["time"]} number={JSON.parse(number)} />
-                            </Pressable>
                         </View >
                     </View>
+                            </Pressable>
                 )}
             </ScrollView>
             <Modal
@@ -146,7 +151,9 @@ export default function Home({ navigation }) {
                         <Pressable
                             style={styles.container}
                             onPress={() => {
+                                
                                 AsyncStorage.removeItem(JSON.parse(tmpArticle));
+                                Notifications.cancelScheduledNotificationAsync(JSON.parse(JSON.parse(tmpArticle))["time"]);
                                 setVisibleModal(!visibleModal);
                             }}
                         >
@@ -197,6 +204,13 @@ const styles = StyleSheet.create({
     },
     titlelistfont: {
         fontSize: 15,
+    },
+    eachSwitchPosition: {
+        left: SCREEN_WIDTH/100*78,
+        backgroundColor:"white",
+         width:40,
+         height:30,
+          transform: [{ scaleX: 1.3 }, { scaleY: 1.3 }]
     },
     addButton: {
         left: SCREEN_WIDTH / 1.18,
