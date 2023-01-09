@@ -14,6 +14,7 @@ import EditPage from './src/EditPage';
 
 import WriteModal from './src/WriteModal';
 import EditModal from './src/EditModal';
+import ReviewPage from './src/ReviewPage';
 // import AlarmModal from './AlarmModal';
 
 // import TimeSettingPage from './TimeSettingPage';
@@ -41,6 +42,8 @@ export default function App() {
         <Stack.Screen name="Home" component={Home} />
         <Stack.Screen name="WritePage" component={WritePage} />
         <Stack.Screen name="EditPage" component={EditPage} />
+        <Stack.Screen name="ReviewPage" component={ReviewPage} />
+
         {/* <Stack.Screen name="TimeSettingPage" component={TimeSettingPage} /> */}
         
         {/* <Stack.Screen name="Test" component={Test} /> */}

@@ -22,21 +22,52 @@ Notifications.setNotificationHandler({
     }),
 });
 
-Notifications.getPresentedNotificationsAsync
+
 export default function Home({ navigation }) {
     const [store, setStore] = useState([]);
     const [visibleModal, setVisibleModal] = useState(false);
     const [tmpArticle, setTmpArticle] = useState();
     const [currentTime2, setCurrentTime2] = useState(getTime());
 
+    const [notificationPermissionToken, setNotificationPermissionToken] = useState('');
+
+    async function registerForPushNotificationsAsync() {
+        let token;
+
+        const { status: existingStatus } = await Notifications.getPermissionsAsync();
+        let finalStatus = existingStatus;
+        if (existingStatus !== 'granted') {
+            const { status } = await Notifications.requestPermissionsAsync();
+            finalStatus = status;
+        }
+        token = finalStatus;
+        console.log(token);
+        if (Platform.OS === 'android') {
+            Notifications.setNotificationChannelAsync('default', {
+                name: 'default',
+                importance: Notifications.AndroidImportance.MAX,
+                vibrationPattern: [0, 250, 250, 250],
+                lightColor: '#FF231F7C',
+            });
+        }
+        return token;
+    }
+
     useEffect(() => {
+        // Notifications.requestPermissionsAsync();
+        setNotificationPermissionToken(registerForPushNotificationsAsync()); 
+        
+        Notifications.addNotificationResponseReceivedListener(response => {
+            // console.log(response.notification.request.content.data);
+            navigation.navigate('ReviewPage',{data : response.notification.request.content.data});
+          });
+
         AsyncStorage.getAllKeys((err, result) => {
             if (!err) setStore(result.reverse());
         });
     }, []);
     useEffect(() => {
         navigation.addListener('focus', () => {
-            // console.log("navigation useEffect");
             AsyncStorage.getAllKeys((err, result) => {
                 if (!err) setStore(result.reverse());
             });
@@ -66,13 +97,15 @@ export default function Home({ navigation }) {
         }, []);
 
         return (
-            <View>
-                <Switch
+            <View style={{ position: 'absolute', top: 30 }}>
+                {innerSecond ? <Switch
                     style={styles.eachSwitchPosition}
                     value={isOn}
                     thumbColor="white"
-                    trackColor={{ true: "#19925E"}}
-                    onValueChange={() => {
+                    trackColor={{ true: "#19925E" }}
+
+                    onValueChange={(e) => {
+
                         if (innerSecond !== 0) {
                             setIsOn(!isOn);
                             if (isOn === true) {
@@ -83,6 +116,9 @@ export default function Home({ navigation }) {
                                     content: {
                                         title: props.number["title"],
                                         body: 'Change sides!',
+                                        sticky:true,
+                                        data: {strData: JSON.stringify({  title: props.number["title"], content: props.number["content"] }), strBoldList: JSON.stringify({ boldList: props.number["boldList"] })}
+                                        
                                     },
                                     identifier: props.number["time"],
                                     trigger: {
@@ -92,7 +128,16 @@ export default function Home({ navigation }) {
                             }
                         }
                     }}
-                />
+                /> : <View></View>}
+
+                {isOn
+                    ? <View style={{ left: SCREEN_WIDTH / 100 * 67, bottom: -25 }}>
+                        <Text style={{ color: "black", opacity: 0.35, fontSize: 12 }}>{JSON.stringify(props.number["endTime"]).slice(1, 5) + '-' + JSON.stringify(props.number["endTime"]).slice(5, 7) + '-' + JSON.stringify(props.number["endTime"]).slice(7, 9) + ' ' + JSON.stringify(props.number["endTime"]).slice(9, 11) + ':' + JSON.stringify(props.number["endTime"]).slice(11, 13)}</Text>
+                    </View>
+                    : <View >
+                        <Text style={{ color: "black", opacity: 0.35, fontSize: 12 }}></Text>
+                    </View>
+                }
             </View>
         );
     }
@@ -107,47 +152,72 @@ export default function Home({ navigation }) {
                     onPress={() => {
                         navigation.navigate('WritePage');
                     }}><Text style={styles.addText}>+</Text></TouchableOpacity>
+                {/* <Button title='전체 알림 리스트 가져오기' onPress={async() => {
+                        try {
+                            let ggg = await Notifications.getAllScheduledNotificationsAsync();
+                            console.log(ggg);
+                          } catch (e) {
+                            console.log("error");
+                          }
+                    }}/> */}
+                {/* <Button title='알림 전체 취소하기' onPress={async() => {
+                        try {
+                            Notifications.cancelAllScheduledNotificationsAsync();
+                            
+                          } catch (e) {
+                            console.log("error");
+                          }
+                    }}/> */}
             </View>
             <ScrollView>
                 {store.map((number, idx) =>
-                <Pressable
-                key={idx + 10}
-                onPress={() => {
-                    navigation.navigate('EditPage', { time: JSON.parse(number)["time"], title: JSON.parse(number)["title"], content: JSON.parse(number)["content"], whenAlarm: JSON.parse(number)["whenAlarm"], endTime: JSON.parse(number)["endTime"], bold: number });
-                }}
-                onLongPress={() => {
-                    setTmpArticle(JSON.stringify(number));
-                    setVisibleModal(!visibleModal);
-                }}
-                style={({ pressed }) => [
-                    {
-                        backgroundColor: pressed
-                            ? 'rgb(210, 230, 255)'
-                            : 'white'
-                    }
-                ]}>
-                    <View  style={styles.titlelist}>
-                        <View >
-                            
-                                <View style={{width:Dimensions.get('window').width/100*70, height:Dimensions.get('window').height/100*5.5, position:'absolute', left:0, top:-21, backgroundColor:'white'}}>
+                    <Pressable
+                        key={idx + 10}
+                        onPress={() => {
+                            navigation.navigate('EditPage', { time: JSON.parse(number)["time"], title: JSON.parse(number)["title"], content: JSON.parse(number)["content"], whenAlarm: JSON.parse(number)["whenAlarm"], endTime: JSON.parse(number)["endTime"], bold: number });
+                        }}
+                        onLongPress={() => {
+                            setTmpArticle(JSON.stringify(number));
+                            setVisibleModal(!visibleModal);
+                        }}
+                        style={({ pressed }) => [
+                            {
+                                backgroundColor: pressed
+                                    ? 'rgb(210, 230, 255)'
+                                    : 'white'
+                            }
+                        ]}>
+                        <View style={styles.titlelist}>
+                            <View >
+
+                                <View style={{ width: Dimensions.get('window').width / 100 * 70, height: Dimensions.get('window').height / 100 * 5.5, position: 'absolute', left: 0, top: 10, backgroundColor: 'white' }}>
                                     <Text >
+                                        {/* <Text>{      JSON.stringify(notificationPermissionToken) }</Text> */}
                                         <Text>• </Text>
                                         <Text style={styles.titlelistfont} key={idx} >{JSON.parse(number)["title"]}</Text>
                                     </Text>
                                 </View>
                                 <EachSwitch onOff={JSON.parse(number)["whenAlarm"]} identifier={JSON.parse(number)["time"]} number={JSON.parse(number)} />
-                        </View >
-                    </View>
-                            </Pressable>
+
+                            </View >
+                        </View>
+                    </Pressable>
                 )}
             </ScrollView>
+
             <Modal
-                animationType="slide"
+                animationType="none"
                 transparent={true}
                 visible={visibleModal}
+                onRequestClose={() => { setVisibleModal(false) }}
             >
-                <View>
-                    <View>
+                <View style={[
+                    StyleSheet.absoluteFill,
+                    { backgroundColor: 'rgba(0, 0, 0, 0.3)' },
+                ]}>
+                    <View style={{ width: '95%', height: '95%', position: 'absolute', top: '2.5%', left: '2.5%', backgroundColor: 'white', borderRadius: 10 }}>
+                        <Text>sfasdff</Text>
+                        <View>
                         <Pressable
                             style={styles.container}
                             onPress={() => {
@@ -159,14 +229,7 @@ export default function Home({ navigation }) {
                         >
                             <Text>delete</Text>
                         </Pressable>
-                        <Pressable
-                            style={styles.container}
-                            onPress={() => {
-                                setVisibleModal(!visibleModal);
-                            }}
-                        >
-                            <Text>editt</Text>
-                        </Pressable>
+                    </View>
                     </View>
                 </View>
             </Modal>
@@ -190,38 +253,49 @@ const styles = StyleSheet.create({
     },
     titlelist: {
         backgroundColor: 'white',
-        width: SCREEN_WIDTH / 1.08,
-        height: SCREEN_HEIGHT / 9,
-        borderRadius: 3,
+        width: SCREEN_WIDTH / 1.05,
+        height: SCREEN_HEIGHT / 100 * 13,
+        borderRadius: 4,
         // height: 42,
         margin: 10,
-        marginTop: 3,
-        marginBottom: 3,
-        elevation: 5,
-        justifyContent: 'center',
+        marginTop: 4,
+        marginBottom: 4,
+        // justifyContent: 'center',
         textAlign: 'center',
         paddingLeft: 10,
+
+        elevation: 2
+
     },
     titlelistfont: {
         fontSize: 15,
     },
     eachSwitchPosition: {
-        left: SCREEN_WIDTH/100*78,
-        backgroundColor:"white",
-         width:40,
-         height:30,
-          transform: [{ scaleX: 1.3 }, { scaleY: 1.3 }]
+        left: SCREEN_WIDTH / 100 * 80,
+        backgroundColor: "white",
+        width: 40,
+        height: 30,
+        transform: [{ scaleX: 1.4 }, { scaleY: 1.4 }]
     },
     addButton: {
         left: SCREEN_WIDTH / 1.18,
         zIndex: 1,
         borderRadius: 30,
         backgroundColor: 'white',
-        width: SCREEN_WIDTH / 8,
-        elevation: 8,
-        alignItems: 'center'
+        width: SCREEN_WIDTH / 100 * 12.5,
+        alignItems: 'center',
+
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 1,
+        },
+        shadowOpacity: 0.22,
+        shadowRadius: 2.22,
+
+        elevation: 3,
     },
     addText: {
-        fontSize: 30,
+        fontSize: 33,
     },
 });
