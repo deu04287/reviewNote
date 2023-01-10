@@ -116,7 +116,7 @@ export default function WriteModal({ navigation, route }) {
               <Pressable key={idx + 10} onPress={() => onPressWord(word)}>
                 <Text style={{ fontWeight: boldList.includes(word) ? 'bold' : 'normal' }}>
                   {word}
-                </Text>
+                </Text>   
               </Pressable>
             ))}
           </Text>
