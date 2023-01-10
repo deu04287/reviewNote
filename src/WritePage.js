@@ -1,5 +1,5 @@
 // import { StatusBar } from 'expo-status-bar';
-import { Alert, ScrollView, Modal, Pressable, Button, StyleSheet, Text, View, StatusBar, TextInput, TouchableOpacity } from 'react-native';
+import { Alert, ScrollView, Modal, Pressable, Button, KeyboardAvoidingView,StyleSheet, Text, View, StatusBar, TextInput, TouchableOpacity } from 'react-native';
 import React, { useState, useEffect, useContext, useRef } from 'react';
 import { Dimensions } from 'react-native';//나중에 전역변수로 바꾸기
 
@@ -60,14 +60,31 @@ export default function WritePage({ navigation }) {
   return (
     <View >
       <StatusBar backgroundColor={"white"} barStyle={"dark-content"} />
-      <View style={{ borderBottomColor: '#DDD', borderBottomWidth: 2.5,    height: SCREEN_HEIGHT/100*8, }}>
-        <TextInput autoFocus={true} onBlur={() =>  ref_content.current.focus() } maxLength={42} style={{ height: 45 }} placeholder='제목' value={title} onChange={(e) => {
+      <KeyboardAvoidingView style={styles.viewTitle}>
+        <TextInput 
+        style={{fontSize:17,}}
+        placeholderTextColor="#0005"
+        autoFocus={true} onBlur={() =>  ref_content.current.focus() } maxLength={42} placeholder='제목' value={title} onChange={(e) => {
           e.preventDefault();
           const { eventCount, target, text } = e.nativeEvent;
           setTitle(text);
         }} />
+      </KeyboardAvoidingView>
 
-        <TouchableOpacity style={{ backgroundColor: '#DDD', position: 'absolute', right: 10, width: 60, height: 30, alignContent: 'center', justifyContent: 'center', }}
+      <View style={styles.viewContent}>
+        <ScrollView >
+          <TextInput ref={ref_content} 
+                  placeholderTextColor="#0005"
+            multiline value={content} placeholder='내용' onChange={(e) => {
+              e.preventDefault();
+              const { eventCount, target, text } = e.nativeEvent;
+              setContent(text);
+            }} />
+        </ScrollView>
+      </View>
+      
+      <View style={{position: 'absolute', top:Dimensions.get('window').height/100*90}}>
+      <TouchableOpacity style={{ backgroundColor: '525252', width: Dimensions.get('window').width,paddingTop:20, height: 80, alignContent: 'center', }}
           onPress={() => {
             if (title === '') {
               console.log("title empty");
@@ -82,20 +99,8 @@ export default function WritePage({ navigation }) {
               navigation.navigate('WriteModal', {time: getTime(), title: title, content: JSON.stringify(content.split(/(\s+)/)),whenAlarm : whenAlarm , boldList:boldList });
               
             }
-          }}><Text style={{ textAlign: 'center' }}>저장</Text></TouchableOpacity>
-
+          }}><Text style={{ textAlign: 'center', color:'white' }}>저장</Text></TouchableOpacity>
       </View>
-      <View >
-        <ScrollView >
-          <TextInput ref={ref_content} style={styles.contentStyle}
-            multiline value={content} onChange={(e) => {
-              e.preventDefault();
-              const { eventCount, target, text } = e.nativeEvent;
-              setContent(text);
-            }} />
-        </ScrollView>
-      </View>
-      
     </View>
   );
 
@@ -105,27 +110,41 @@ const SCREEN_WIDTH = Dimensions.get('window').width;
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#888',
-    alignItems: 'center',
-    justifyContent: 'center',
+  viewMain:{
+    justifyContent:'center',
+    textAlign:'center',
+    alignItems:'center',
+    position:'relative',
   },
-  modal: {
-    backgroundColor: '#DDD',
-    width: SCREEN_WIDTH/1.1,
-    height: SCREEN_HEIGHT/1.1,
+  viewTitle:{
+    justifyContent:'center',
+
+    backgroundColor:'white',
+    borderBottomColor: '#EEE', borderBottomWidth: 0.7,    height: 50,
+    paddingLeft:10,paddingRight:10,
   },
-  titlelist: {
-    backgroundColor: '#555',
-    width: 400,
-    height: 30,
-  },
-  contentStyle: {
+  viewContent:{
     backgroundColor: 'white',
     width: SCREEN_WIDTH,
-    height: SCREEN_HEIGHT/100*89.3,
+    height: SCREEN_HEIGHT/100*90.3,
     textAlignVertical: 'top',
-    borderBottomWidth: 10, borderBottomColor: '#AAA' 
+    borderBottomWidth: 10, borderBottomColor: '#AAA', 
+    paddingLeft:10, paddingTop:10, paddingRight:10,
   },
+  buttonSave:{
+
+  },
+  // modal: {
+  //   backgroundColor: '#DDD',
+  //   width: SCREEN_WIDTH/1.1,
+  //   height: SCREEN_HEIGHT/1.1,
+  // },
+  // titlelist: {
+  //   backgroundColor: '#555',
+  //   width: 400,
+  //   height: 30,
+  // },
+  // contentStyle: {
+
+  // },
 });
