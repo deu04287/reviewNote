@@ -83,7 +83,12 @@ export default function Home({ navigation }) {
         const [isOn, setIsOn] = useState(false);
         const [innerSecond, setInnerSecond] = useState(props.number["whenAlarm"]);
         const [turnOFFAfterTime, setTurnOFFAfterTime] = useState(getEndTime(props.number['time'], Number(props.number["whenAlarm"])));
+        
+        const [innerEndTime, setInnerEndTime] = useState(props.number["endTime"]);
+        const [innerBoldList, setInnerBoldList] = useState([]);
+    
 
+        
         useEffect(() => {
             if (props.onOff === 0)
                 setIsOn(false);
@@ -94,6 +99,13 @@ export default function Home({ navigation }) {
                 }
                 else setIsOn(true);
             }
+            AsyncStorage.getItem(JSON.stringify(props.number) , (err, result) => {
+                if (!err) {
+                    setInnerBoldList(result);
+                    // console.log('result',result);
+                }
+                else console.log("error");
+            });
         }, []);
 
         return (
@@ -112,19 +124,21 @@ export default function Home({ navigation }) {
                                 Notifications.cancelScheduledNotificationAsync(props.identifier);
                             }
                             else {
-                                Notifications.scheduleNotificationAsync({
-                                    content: {
-                                        title: props.number["title"],
-                                        body: 'Change sides!',
-                                        sticky:true,
-                                        data: {strData: JSON.stringify({  title: props.number["title"], content: props.number["content"] }), strBoldList: JSON.stringify({ boldList: props.number["boldList"] })}
+                                console.log(props.number);
+                                setInnerEndTime(getEndTime(getTime(),innerSecond));
+                                // Notifications.scheduleNotificationAsync({
+                                //     content: {
+                                //         title: props.number["title"],
+                                //         body: 'Change sides!',
+                                //         sticky:true,
+                                //         data: {strData: JSON.stringify({  title: props.number["title"], content: props.number["content"] }), strBoldList: JSON.stringify({ boldList: props.number["boldList"] })}
                                         
-                                    },
-                                    identifier: props.number["time"],
-                                    trigger: {
-                                        seconds: innerSecond, //onPress가 클릭이 되면 60초 뒤에 알람이 발생합니다.
-                                    },
-                                });
+                                //     },
+                                //     identifier: props.number["time"],
+                                //     trigger: {
+                                //         seconds: innerSecond, //onPress가 클릭이 되면 60초 뒤에 알람이 발생합니다.
+                                //     },
+                                // });
                             }
                         }
                     }}
@@ -132,7 +146,7 @@ export default function Home({ navigation }) {
 
                 {isOn
                     ? <View style={{ left: SCREEN_WIDTH / 100 * 67, bottom: -25 }}>
-                        <Text style={{ color: "black", opacity: 0.35, fontSize: 12 }}>{JSON.stringify(props.number["endTime"]).slice(1, 5) + '-' + JSON.stringify(props.number["endTime"]).slice(5, 7) + '-' + JSON.stringify(props.number["endTime"]).slice(7, 9) + ' ' + JSON.stringify(props.number["endTime"]).slice(9, 11) + ':' + JSON.stringify(props.number["endTime"]).slice(11, 13)}</Text>
+                        <Text style={{ color: "black", opacity: 0.35, fontSize: 12 }}>{JSON.stringify(innerEndTime).slice(1, 5) + '-' + JSON.stringify(innerEndTime).slice(5, 7) + '-' + JSON.stringify(innerEndTime).slice(7, 9) + ' ' + JSON.stringify(innerEndTime).slice(9, 11) + ':' + JSON.stringify(innerEndTime).slice(11, 13)}</Text>
                     </View>
                     : <View >
                         <Text style={{ color: "black", opacity: 0.35, fontSize: 12 }}></Text>
