@@ -21,8 +21,6 @@ export default function EditModal({ navigation, route }) {
   const [showmodal, setShowmodal] = useState(false);
   const [tmpSaveWhenAlarm, setTmpSaveWhenAlarm] = useState(0);
 
-  const [trash, setTrash] = useState([]);
-
   const ARR = () => {
     const [isOn, setIsOn] = useState(false);
     useEffect(() => {
@@ -110,26 +108,42 @@ export default function EditModal({ navigation, route }) {
     }
     let a = [];
     boldList.find(element => {
-      if(content.includes(element) == true){
+      if (content.includes(element) == true) {
         a.push(element);
         setBoldList(a);
       }
     });
-      // boldList.find(element => content.includes(element) == true)
-      
+    // boldList.find(element => content.includes(element) == true)
+
   }, []);
+
+  console.log(JSON.stringify(content[1]) );
+
   return (
     <View style={[StyleSheet.absoluteFill, { backgroundColor: 'rgba(0, 0, 0, 0.3)' },]}>
       <View style={{ width: '95%', height: '95%', position: 'absolute', top: '2.5%', left: '2.5%', backgroundColor: 'white', borderRadius: 10 }}>
         <Text style={{ textAlign: 'center' }}>edit modal</Text>
         <Text>
-          {content.map((word, idx) => (
-            <Pressable key={idx + 10} onPress={() => onPressWord(word)}>
-              <Text style={{ fontWeight: boldList.includes(word) ? 'bold' : 'normal' }}>
+          {content.map((word, idx) => {
+            if(JSON.stringify(word).match(/\s+/g)){
+              return (
+                <Text>
                 {word}
-              </Text>
-            </Pressable>
-          ))}
+                </Text>
+              );
+            }
+            else{
+              return (
+                <Pressable key={idx + 10} onPress={() => onPressWord(word)}>
+                  <Text style={{ fontWeight: boldList.includes(word) ? 'bold' : 'normal' }}>
+                    {word}
+                  </Text>
+                </Pressable>
+              );
+            }
+            
+          }
+          )}
         </Text>
         <AlarmSettingModal whenAlarm={whenAlarm} />
         <Button title={JSON.stringify(whenAlarm)} onPress={() => {
@@ -141,8 +155,8 @@ export default function EditModal({ navigation, route }) {
             content: {
               title: title,
               body: 'Change sides!',
-              sticky:true,
-              data: {strData: JSON.stringify({ time: getTime(), title: title, content: content, whenAlarm: whenAlarm, endTime: getEndTime(getTime(), whenAlarm) }), strBoldList: JSON.stringify({ boldList: boldList.filter((w) => w = w.trim()) })}
+              sticky: true,
+              data: { strData: JSON.stringify({ time: getTime(), title: title, content: content, whenAlarm: whenAlarm, endTime: getEndTime(getTime(), whenAlarm) }), strBoldList: JSON.stringify({ boldList: boldList.filter((w) => w = w.trim()) }) }
             },
             identifier: getTime(),
             trigger: {

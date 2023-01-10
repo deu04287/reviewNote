@@ -96,7 +96,7 @@ export default function WritePage({ navigation }) {
             }
             else {
 
-              navigation.navigate('WriteModal', {time: getTime(), title: title, content: JSON.stringify(content.split(/(\s+)/)),whenAlarm : whenAlarm , boldList:boldList });
+              navigation.navigate('WriteModal', {time: getTime(), title: title, content: JSON.stringify(content),whenAlarm : whenAlarm , boldList:boldList });
               
             }
           }}><Text style={{ textAlign: 'center', color:'white' }}>저장</Text></TouchableOpacity>

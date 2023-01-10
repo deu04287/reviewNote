@@ -15,7 +15,7 @@ export default function WriteModal({ navigation, route }) {
   const [boldList, setBoldList] = useState(route.params.boldList);
   const [whenAlarm, setWhenAlarm] = useState(0);
 
-  const [parseContent, setParseContent] = useState(JSON.parse(route.params.content).join(''));
+  // const [parseContent, setParseContent] = useState(JSON.parse(route.params.content).join(''));
   const [tmpBoldList, setTmpBoldList] = useState(route.params.tmpBoldList);
 
   const [showmodal, setShowmodal] = useState(false);
@@ -103,6 +103,7 @@ export default function WriteModal({ navigation, route }) {
       setBoldList([...boldList, word]);
     }
   };
+
     return (
       <View style={[
         StyleSheet.absoluteFill,
@@ -112,15 +113,17 @@ export default function WriteModal({ navigation, route }) {
         <ScrollView>
           <Text style={{ textAlign: 'center' }}>write modal</Text>
           <Text>
-            {parseContent.split(/(\s+)/).map((word, idx) => (
+            {/* {JSON.parse(content).map((word, idx) => (
               <Pressable key={idx + 10} onPress={() => onPressWord(word)}>
                 <Text style={{ fontWeight: boldList.includes(word) ? 'bold' : 'normal' }}>
                   {word}
                 </Text>   
               </Pressable>
-            ))}
+            ))} */}
+            {/* {JSON.stringify(parseContent)} */}
+            214234
           </Text>
-
+        
           <Button title={JSON.stringify(whenAlarm) } onPress={async () => {
             // console.log(boldList.filter((w) => w = w.trim()) );
             AsyncStorage.setItem(JSON.stringify({ time: getTime(), title: title, content: JSON.parse(content), whenAlarm: whenAlarm ,endTime:getEndTime(getTime(),whenAlarm)}), JSON.stringify({ boldList: boldList.filter((w) => w = w.trim())  }));
