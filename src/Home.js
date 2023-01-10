@@ -160,6 +160,7 @@ export default function Home({ navigation }) {
     return (
         <View style={styles.main}>
             <StatusBar backgroundColor={"white"} barStyle={"dark-content"} />
+                <ScrollView>
             <View style={{ marginTop: 4, marginBottom: 4 }}>
 
                 <TouchableOpacity style={styles.addButton}
@@ -167,23 +168,22 @@ export default function Home({ navigation }) {
                         navigation.navigate('WritePage');
                     }}><Text style={styles.addText}>+</Text></TouchableOpacity>
                 {/* <Button title='전체 알림 리스트 가져오기' onPress={async() => {
-                        try {
-                            let ggg = await Notifications.getAllScheduledNotificationsAsync();
-                            console.log(ggg);
-                          } catch (e) {
-                            console.log("error");
-                          }
-                    }}/> */}
+                    try {
+                        let ggg = await Notifications.getAllScheduledNotificationsAsync();
+                        console.log(ggg);
+                    } catch (e) {
+                        console.log("error");
+                    }
+                }}/> */}
                 {/* <Button title='알림 전체 취소하기' onPress={async() => {
-                        try {
-                            Notifications.cancelAllScheduledNotificationsAsync();
-                            
-                          } catch (e) {
-                            console.log("error");
-                          }
-                    }}/> */}
+                    try {
+                        Notifications.cancelAllScheduledNotificationsAsync();
+                        
+                    } catch (e) {
+                        console.log("error");
+                    }
+                }}/> */}
             </View>
-            <ScrollView>
                 {store.map((number, idx) =>
                     <Pressable
                         key={idx + 10}
@@ -194,10 +194,10 @@ export default function Home({ navigation }) {
                             setTmpArticle(JSON.stringify(number));
                             setVisibleModal(!visibleModal);
                         }}
-                        style={({ pressed }) => [
+                        style={({  pressed }) => [
                             {
                                 backgroundColor: pressed
-                                    ? 'rgb(210, 230, 255)'
+                                    ? '#DDD'
                                     : 'white'
                             }
                         ]}>
@@ -299,7 +299,7 @@ const styles = StyleSheet.create({
         width: SCREEN_WIDTH / 100 * 12.5,
         alignItems: 'center',
 
-        shadowColor: "#000",
+        shadowColor: "#0007",
         shadowOffset: {
             width: 0,
             height: 1,
@@ -307,7 +307,7 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.22,
         shadowRadius: 2.22,
 
-        elevation: 3,
+        elevation: 8,
     },
     addText: {
         fontSize: 33,

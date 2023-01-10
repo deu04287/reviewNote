@@ -109,6 +109,7 @@ export default function WriteModal({ navigation, route }) {
         { backgroundColor: 'rgba(0, 0, 0, 0.3)' },
       ]}>
         <View style={{ width: '95%', height: '95%', position: 'absolute', top: '2.5%', left: '2.5%', backgroundColor: 'white', borderRadius: 10 }}>
+        <ScrollView>
           <Text style={{ textAlign: 'center' }}>write modal</Text>
           <Text>
             {parseContent.split(/(\s+)/).map((word, idx) => (
@@ -121,7 +122,8 @@ export default function WriteModal({ navigation, route }) {
           </Text>
 
           <Button title={JSON.stringify(whenAlarm) } onPress={async () => {
-            AsyncStorage.setItem(JSON.stringify({ time: getTime(), title: title, content: JSON.parse(content), whenAlarm: whenAlarm ,endTime:getEndTime(getTime(),whenAlarm)}), JSON.stringify({ boldList: boldList }));
+            // console.log(boldList.filter((w) => w = w.trim()) );
+            AsyncStorage.setItem(JSON.stringify({ time: getTime(), title: title, content: JSON.parse(content), whenAlarm: whenAlarm ,endTime:getEndTime(getTime(),whenAlarm)}), JSON.stringify({ boldList: boldList.filter((w) => w = w.trim())  }));
             Notifications.scheduleNotificationAsync({
               content: {
                 title: title,
@@ -146,6 +148,8 @@ export default function WriteModal({ navigation, route }) {
             </View>
                     
           <Button title='go back' onPress={() => navigation.goBack()}/>
+          </ScrollView>
+
         </View>
          <AlarmSettingModal whenAlarm={whenAlarm}/>
       </View>

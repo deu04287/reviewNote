@@ -1,4 +1,4 @@
-import { Button, Modal, StyleSheet, Text,BackHandler, View, Pressable, StatusBar, TextInput, TouchableOpacity, Alert } from 'react-native';
+import { Button, Modal, StyleSheet, Text,BackHandler, View, Pressable, StatusBar, TextInput, TouchableOpacity, Alert, ScrollView } from 'react-native';
 import React, { useState, useEffect, useContext } from 'react';
 import { Dimensions } from 'react-native'; //나중에 전역변수로 바꾸기
 
@@ -64,6 +64,7 @@ export default function ReviewPage({ navigation, route }) {
             <StatusBar backgroundColor={"white"} barStyle={"dark-content"} />
             {data ?
                 <View>
+                    <ScrollView>
                     {/* <Text>{JSON.stringify(content)}</Text>
                     <Text>boldList:{JSON.stringify(boldList)}</Text> */}
                     <Text>
@@ -90,6 +91,7 @@ export default function ReviewPage({ navigation, route }) {
                             } 
                         }
                     }></Button>
+                    </ScrollView>
                 </View>
                 :
                 <View>

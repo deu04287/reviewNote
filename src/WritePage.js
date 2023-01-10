@@ -58,9 +58,9 @@ export default function WritePage({ navigation }) {
   );
   
   return (
-    <View >
+    <View style={styles.viewMain}>
       <StatusBar backgroundColor={"white"} barStyle={"dark-content"} />
-      <KeyboardAvoidingView style={styles.viewTitle}>
+      <View style={styles.viewTitle}>
         <TextInput 
         style={{fontSize:17,}}
         placeholderTextColor="#0005"
@@ -69,9 +69,11 @@ export default function WritePage({ navigation }) {
           const { eventCount, target, text } = e.nativeEvent;
           setTitle(text);
         }} />
-      </KeyboardAvoidingView>
+      </View>
 
-      <View style={styles.viewContent}>
+      
+
+        <View style={styles.viewContent}>
         <ScrollView >
           <TextInput ref={ref_content} 
                   placeholderTextColor="#0005"
@@ -80,11 +82,9 @@ export default function WritePage({ navigation }) {
               const { eventCount, target, text } = e.nativeEvent;
               setContent(text);
             }} />
-        </ScrollView>
+      </ScrollView>
       </View>
-      
-      <View style={{position: 'absolute', top:Dimensions.get('window').height/100*90}}>
-      <TouchableOpacity style={{ backgroundColor: '525252', width: Dimensions.get('window').width,paddingTop:20, height: 80, alignContent: 'center', }}
+      <TouchableOpacity style={{ backgroundColor: '#525252', width: Dimensions.get('window').width,height:50, justifyContent:'center', alignContent: 'center', }}
           onPress={() => {
             if (title === '') {
               console.log("title empty");
@@ -100,7 +100,6 @@ export default function WritePage({ navigation }) {
               
             }
           }}><Text style={{ textAlign: 'center', color:'white' }}>저장</Text></TouchableOpacity>
-      </View>
     </View>
   );
 
@@ -111,24 +110,28 @@ const SCREEN_HEIGHT = Dimensions.get('window').height;
 
 const styles = StyleSheet.create({
   viewMain:{
+    flex:1,
     justifyContent:'center',
     textAlign:'center',
     alignItems:'center',
     position:'relative',
   },
   viewTitle:{
-    justifyContent:'center',
+    // flex:1,
 
+    justifyContent:'center',
     backgroundColor:'white',
-    borderBottomColor: '#EEE', borderBottomWidth: 0.7,    height: 50,
+    width:SCREEN_WIDTH,
+    borderBottomColor: '#EEE', borderBottomWidth: 0.7,    
+    height: 50,
     paddingLeft:10,paddingRight:10,
   },
   viewContent:{
+        flex:1,
     backgroundColor: 'white',
     width: SCREEN_WIDTH,
-    height: SCREEN_HEIGHT/100*90.3,
+    // height: SCREEN_HEIGHT/100*100,
     textAlignVertical: 'top',
-    borderBottomWidth: 10, borderBottomColor: '#AAA', 
     paddingLeft:10, paddingTop:10, paddingRight:10,
   },
   buttonSave:{
