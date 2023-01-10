@@ -38,42 +38,6 @@ export default function EditPage({ navigation, route }) {
 
     const [toggle_text_or_textinput, setToggle_text_or_textinput] = useState(true);
 
-
-    const ARR = (props) => {
-        const [isOn, setIsOn] = useState(false);
-        useEffect(() => {
-            // if(props.onOff === 0 )
-            //     setIsOn(false);
-            // else
-            //     setIsOn(true);
-        }, []);
-            
-        return (
-            <Switch
-            style={styles.qwer}
-                value={isOn}
-                onValueChange={() => {
-                    setIsOn(!isOn);
-                    if(isOn === true){
-                        // Notifications.cancelScheduledNotificationAsync(props.iden);
-                        // console.log(props.iden);
-                    }
-                    else{
-                        // console.log(props.onOff);
-                    }
-                }}
-            />
-        );
-    }
-
-    const onPressWord = (word) => {
-        if (boldList.includes(word)) {
-            setBoldList(boldList.filter((w) => w !== word));
-        } else {
-            setBoldList([...boldList, word]);
-        }
-    };
-
     const [whenAlarm, setWhenAlarm] = useState(0);
     
 
@@ -87,6 +51,7 @@ export default function EditPage({ navigation, route }) {
             else console.log("error");
         });
         setWhenAlarm(route.params.whenAlarm);
+        // console.log(boldList.filter((w) => w = w.trim()));
         
     }, []);
 
@@ -101,7 +66,7 @@ export default function EditPage({ navigation, route }) {
                     setTitle(text);
                 }} />
                 <Text>내용</Text>
-                <Pressable onPress={() => { setToggle_text_or_textinput(!toggle_text_or_textinput); console.log(boldList) }}>
+                <Pressable onPress={() => { setToggle_text_or_textinput(!toggle_text_or_textinput);  }}>
                     {toggle_text_or_textinput ?
                         <Text>
                             {content.map((word, idx) => (

@@ -21,6 +21,7 @@ export default function EditModal({ navigation, route }) {
   const [showmodal, setShowmodal] = useState(false);
   const [tmpSaveWhenAlarm, setTmpSaveWhenAlarm] = useState(0);
 
+  const [trash, setTrash] = useState([]);
 
   const ARR = () => {
     const [isOn, setIsOn] = useState(false);
@@ -107,7 +108,15 @@ export default function EditModal({ navigation, route }) {
     if (getTime() >= route.params.endTime) {
       setWhenAlarm(0);
     }
-
+    let a = [];
+    boldList.find(element => {
+      if(content.includes(element) == true){
+        a.push(element);
+        setBoldList(a);
+      }
+    });
+      // boldList.find(element => content.includes(element) == true)
+      
   }, []);
   return (
     <View style={[StyleSheet.absoluteFill, { backgroundColor: 'rgba(0, 0, 0, 0.3)' },]}>
@@ -127,13 +136,13 @@ export default function EditModal({ navigation, route }) {
           // if (!(title === route.params.title && JSON.stringify(content) === JSON.stringify(route.params.content) && JSON.stringify(whenAlarm) === JSON.stringify(route.params.whenAlarm) && JSON.stringify(tmpBoldList) === JSON.stringify(boldList))) {
           Notifications.cancelScheduledNotificationAsync(route.params.time);
           AsyncStorage.removeItem(JSON.stringify({ time: route.params.time, title: route.params.title, content: route.params.content, whenAlarm: route.params.whenAlarm, endTime: route.params.endTime }));
-          AsyncStorage.setItem(JSON.stringify({ time: getTime(), title: title, content: content, whenAlarm: whenAlarm, endTime: getEndTime(getTime(), whenAlarm) }), JSON.stringify({ boldList: boldList }));
+          AsyncStorage.setItem(JSON.stringify({ time: getTime(), title: title, content: content, whenAlarm: whenAlarm, endTime: getEndTime(getTime(), whenAlarm) }), JSON.stringify({ boldList: boldList.filter((w) => w = w.trim()) }));
           Notifications.scheduleNotificationAsync({
             content: {
               title: title,
               body: 'Change sides!',
               sticky:true,
-              data: {strData: JSON.stringify({ time: getTime(), title: title, content: content, whenAlarm: whenAlarm, endTime: getEndTime(getTime(), whenAlarm) }), strBoldList: JSON.stringify({ boldList: boldList })}
+              data: {strData: JSON.stringify({ time: getTime(), title: title, content: content, whenAlarm: whenAlarm, endTime: getEndTime(getTime(), whenAlarm) }), strBoldList: JSON.stringify({ boldList: boldList.filter((w) => w = w.trim()) })}
             },
             identifier: getTime(),
             trigger: {
@@ -148,7 +157,7 @@ export default function EditModal({ navigation, route }) {
           <TouchableOpacity
             style={{ backgroundColor: '#DDD', width: 300, height: 100, borderRadius: 10, justifyContent: 'center', alignItems: 'center' }}
             onPress={() => setShowmodal(true)}>
-            <Text>go AlarmModal</Text>
+            <Text>go AlarmModal{JSON.stringify(boldList)}</Text>
             <ARR />
           </TouchableOpacity>
         </View>

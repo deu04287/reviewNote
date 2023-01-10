@@ -101,7 +101,7 @@ export default function Home({ navigation }) {
             }
             AsyncStorage.getItem(JSON.stringify(props.number) , (err, result) => {
                 if (!err) {
-                    setInnerBoldList(result);
+                    setInnerBoldList(JSON.parse(result)["boldList"]);
                     // console.log('result',result);
                 }
                 else console.log("error");
@@ -124,21 +124,21 @@ export default function Home({ navigation }) {
                                 Notifications.cancelScheduledNotificationAsync(props.identifier);
                             }
                             else {
-                                console.log(props.number);
+                                // console.log(props.number);
                                 setInnerEndTime(getEndTime(getTime(),innerSecond));
-                                // Notifications.scheduleNotificationAsync({
-                                //     content: {
-                                //         title: props.number["title"],
-                                //         body: 'Change sides!',
-                                //         sticky:true,
-                                //         data: {strData: JSON.stringify({  title: props.number["title"], content: props.number["content"] }), strBoldList: JSON.stringify({ boldList: props.number["boldList"] })}
+                                Notifications.scheduleNotificationAsync({
+                                    content: {
+                                        title: props.number["title"],
+                                        body: 'Change sides!',
+                                        sticky:true,
+                                        data: {strData: JSON.stringify({  title: props.number["title"], content: props.number["content"] }), strBoldList: JSON.stringify({ boldList: innerBoldList })}
                                         
-                                //     },
-                                //     identifier: props.number["time"],
-                                //     trigger: {
-                                //         seconds: innerSecond, //onPress가 클릭이 되면 60초 뒤에 알람이 발생합니다.
-                                //     },
-                                // });
+                                    },
+                                    identifier: props.number["time"],
+                                    trigger: {
+                                        seconds: innerSecond, //onPress가 클릭이 되면 60초 뒤에 알람이 발생합니다.
+                                    },
+                                });
                             }
                         }
                     }}

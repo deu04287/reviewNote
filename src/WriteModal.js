@@ -127,7 +127,7 @@ export default function WriteModal({ navigation, route }) {
                 title: title,
                 body: 'Change sides!',
                 sticky:true,
-                data: {strData: JSON.stringify({ time: getTime(), title: title, content: JSON.parse(content), whenAlarm: whenAlarm ,endTime:getEndTime(getTime(),whenAlarm)}), strBoldList: JSON.stringify({ boldList: boldList })}
+                data: {strData: JSON.stringify({ time: getTime(), title: title, content: JSON.parse(content), whenAlarm: whenAlarm ,endTime:getEndTime(getTime(),whenAlarm)}), strBoldList: JSON.stringify({ boldList: boldList.filter((w) => w = w.trim()) })}
               },
               identifier: getTime(),
               trigger: {
