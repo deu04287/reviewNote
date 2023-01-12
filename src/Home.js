@@ -66,6 +66,13 @@ export default function Home({ navigation }) {
             if (!err) setStore(result.reverse());
         });
     }, []);
+
+    // useEffect(() => {
+
+    //     AsyncStorage.getAllKeys((err, result) => {
+    //         if (!err) setStore(result.reverse());
+    //     });
+    // }, [visibleModal]); // 삭제후 리로드 안해주면 each뭐시기 컴포넌트에서 innerbold 꼬임
     useEffect(() => {
         navigation.addListener('focus', () => {
             AsyncStorage.getAllKeys((err, result) => {
@@ -99,14 +106,17 @@ export default function Home({ navigation }) {
                 }
                 else setIsOn(true);
             }
+        }, []);
+        useEffect(() => {
             AsyncStorage.getItem(JSON.stringify(props.number) , (err, result) => {
-                if (!err) {
+                if (result) {
+                    // console.log(JSON.parse(result)["boldList"]);
                     setInnerBoldList(JSON.parse(result)["boldList"]);
-                    // console.log('result',result);
                 }
-                else console.log("error");
+                else console.log(err);
             });
         }, []);
+
 
         return (
             <View style={{ position: 'absolute', top: 30 }}>
@@ -116,7 +126,7 @@ export default function Home({ navigation }) {
                     thumbColor="white"
                     trackColor={{ true: "#19925E" }}
 
-                    onValueChange={(e) => {
+                    onValueChange={async (e) => {
 
                         if (innerSecond !== 0) {
                             setIsOn(!isOn);
@@ -126,6 +136,8 @@ export default function Home({ navigation }) {
                             else {
                                 // console.log(props.number);
                                 setInnerEndTime(getEndTime(getTime(),innerSecond));
+                                
+
                                 Notifications.scheduleNotificationAsync({
                                     content: {
                                         title: props.number["title"],
@@ -236,9 +248,16 @@ export default function Home({ navigation }) {
                             style={styles.container}
                             onPress={() => {
                                 
-                                AsyncStorage.removeItem(JSON.parse(tmpArticle));
                                 Notifications.cancelScheduledNotificationAsync(JSON.parse(JSON.parse(tmpArticle))["time"]);
-                                setVisibleModal(!visibleModal);
+                                AsyncStorage.removeItem(JSON.parse(tmpArticle)).then(
+                                    AsyncStorage.getAllKeys((err, result) => {
+                                        if (!err) setStore(result.reverse());
+                                    }).then(
+                                        setVisibleModal(!visibleModal)
+                                    )
+                                )
+
+                                
                             }}
                         >
                             <Text>delete</Text>

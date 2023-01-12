@@ -22,7 +22,20 @@ Notifications.setNotificationHandler({
     }),
 });
 
-
+function showAlert(title, content) {
+    Alert.alert(
+      title,
+      content,
+      [
+        {
+          text: 'OK',
+          onPress: () => console.log('OK button pressed'),
+        },
+      ],
+      { cancelable: false }
+    );
+}
+  
 export default function EditPage({ navigation, route }) {
     const [title, setTitle] = useState(route.params.title);
     const [content, setContent] = useState(route.params.content);

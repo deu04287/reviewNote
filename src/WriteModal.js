@@ -11,7 +11,7 @@ import getEndTime from '../functions/getEndTime';
 
 export default function WriteModal({ navigation, route }) {
   const [title, setTitle] = useState(route.params.title);
-  const [content, setContent] = useState(route.params.content);
+  const [content, setContent] = useState( route.params.content);
   const [boldList, setBoldList] = useState(route.params.boldList);
   const [whenAlarm, setWhenAlarm] = useState(0);
 
@@ -103,7 +103,7 @@ export default function WriteModal({ navigation, route }) {
       setBoldList([...boldList, word]);
     }
   };
-
+  // console.log(JSON.parse(content) );
     return (
       <View style={[
         StyleSheet.absoluteFill,
@@ -112,17 +112,32 @@ export default function WriteModal({ navigation, route }) {
         <View style={{ width: '95%', height: '95%', position: 'absolute', top: '2.5%', left: '2.5%', backgroundColor: 'white', borderRadius: 10 }}>
         <ScrollView>
           <Text style={{ textAlign: 'center' }}>write modal</Text>
+          
           <Text>
-            {/* {JSON.parse(content).map((word, idx) => (
-              <Pressable key={idx + 10} onPress={() => onPressWord(word)}>
-                <Text style={{ fontWeight: boldList.includes(word) ? 'bold' : 'normal' }}>
-                  {word}
-                </Text>   
-              </Pressable>
-            ))} */}
-            {/* {JSON.stringify(parseContent)} */}
-            214234
-          </Text>
+          {JSON.parse(content).map((word, idx) => {
+            if(word.match(/\n+/g)){
+              return (
+                <Text key={idx + 10}>
+                {word}
+                </Text>
+              );
+            }
+            else{
+              return (
+                <Pressable key={idx + 10} onPress={() => onPressWord(word)}>
+                  <Text style={{ fontWeight: boldList.includes(word) ? 'bold' : 'normal' }}>
+                    {word}
+                  </Text>
+                </Pressable>
+              );
+            }
+            
+          }
+          )}
+        </Text>
+
+                    
+
         
           <Button title={JSON.stringify(whenAlarm) } onPress={async () => {
             // console.log(boldList.filter((w) => w = w.trim()) );

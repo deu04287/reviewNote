@@ -1,98 +1,61 @@
-import * as Notifications from 'expo-notifications';
-import * as Permissions from 'expo-permissions';
-
-import * as Device from 'expo-device';
-
-import React, { useState, useEffect, useContext } from 'react';
-import { Alert, Button, Modal, StyleSheet, Text, View, Pressable, ScrollView, StatusBar, TextInput, TouchableOpacity } from 'react-native';
-
-import TimeSelector from './TimeSelector'; // 드래그해서 시간 설정하는거 가져오는 코드
-
-import moment from 'moment'; //모멘트 js 시간관련
-import { DateTimePicker, DateTimePickerAndroid} from '@react-native-community/datetimepicker';
-
-import { getLocales, getCalendars } from 'expo-localization'; // 위치
-// export default function Test() {
-
-//   var date = moment().utcOffset('+00:00').format(' hh:mm:ss a');
-
-//   const deviceLanguage = getLocales()[0].languageCode;
-//   // console.log(JSON.stringify(getCalendars()));
-//   const dsfds = async() => {
-//     let a = await Device.getUptimeAsync();
-//     console.log(JSON.stringify(a));
-  
-//   }
-//   // dsfds();
-//   console.log('date',date);
-//   return (
-//     // <View style={styles.main}>
-//     <View style={styles.main}>
-//       <Text>------------------------------------------------</Text>
-//        <TimeSelector limit = {62.5} defaultOffsetHour = {6}/> 
-
-//     </View>
-//   );
-// }
-
-// const styles = StyleSheet.create({
-//   main: {
-//     flex: 1,
-//     backgroundColor: "white",
-//   },
-//   scroll: {
-//     flex: 1,
-//     flexDirection:'row',
-//     alignItems:'center',
-//     width: 300,
-//     backgroundColor: "tomato",
-//   },
-//   scroll4: {
-
-//     backgroundColor: "green",  },
-//   scroll2: {
-//     flex: 9,
-//     backgroundColor: "#DDD",
-//   },
-//   scroll3: {
-
-//     backgroundColor: "blue",
-//   },
-  
-// });
+import { ScrollView, TouchableOpacity, Button, Modal, StyleSheet, Text, View, StatusBar, Pressable } from 'react-native';
+import { Dimensions } from 'react-native'; //나중에 전역변수로 바꾸기
+import React, { useState, useEffect } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function Test() {
-  const [date, setDate] = useState(new Date(1598051730000));
+  const [store, setStore] = useState([]);
 
-  const onChange = (event, selectedDate) => {
-    const currentDate = selectedDate;
-    setDate(currentDate);
-  };
+  function delay(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
 
-  const showMode = (currentMode) => {
-    DateTimePickerAndroid.open({
-      value: date,
-      onChange,
-      mode: currentMode,
-      is24Hour: true,
-      display:'spinner',
-    });
-  };
+  async function getBanana() {
+    await delay(2000);
+    console.log("bananana");
+    return "getBanana";
+  }
 
-  const showDatepicker = () => {
-    showMode('date');
-  };
-
-  const showTimepicker = () => {
-    showMode('time');
-  };
-
+  // console.log(JSON.stringify(store[0]));
   return (
     <View>
-      <Text>-----------</Text>
-      <Button onPress={showDatepicker} title="Show date picker!" />
-      <Button onPress={showTimepicker} title="Show time picker!" />
-      <Text>selected: {date.toLocaleString()}</Text>
+      <Text>===============================</Text>
+      <Text>
+        {JSON.stringify(store)}
+      </Text>
+      <Button title='비동기 버튼' onPress={async () => {
+        AsyncStorage.getAllKeys(async (err, result) => {
+          if (!err) setStore(result);
+        });
+
+      }}></Button>
+      <Button title='추가' onPress={async () => {
+        // AsyncStorage.setItem("10", "1");
+        // AsyncStorage.getAllKeys( (err, result) => {
+        //   if (!err) setStore(result);
+        // });
+        // await getBanana();
+        // AsyncStorage.setItem("11", "1");
+        // AsyncStorage.getAllKeys( (err, result) => {
+        //   if (!err) setStore(result);
+        // });
+        // await getBanana();
+
+        AsyncStorage.clear()
+        // AsyncStorage.getAllKeys( (err, result) => {
+        //   if (!err) setStore(result);
+        // });
+
+      }}></Button>
+
+
+
+      <Button title='리로딩' onPress={
+        async () => {
+          const dsf = await AsyncStorage.removeItem("{\"time\":\"20230112173013\",\"title\":\"ㅇㄹㄴㅇㅎㄴㅁㅎ\\n\",\"content\":[\"ㅈ퓯\",\"\\n\\n\\n\",\"듐듀\"],\"whenAlarm\":3,\"endTime\":\"20230112173016\"}");
+
+        }
+      } />
     </View>
   );
 };

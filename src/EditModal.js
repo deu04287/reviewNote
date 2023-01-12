@@ -117,7 +117,7 @@ export default function EditModal({ navigation, route }) {
 
   }, []);
 
-  console.log(JSON.stringify(content[1]) );
+  console.log(content[1].match(/\n/g) );
 
   return (
     <View style={[StyleSheet.absoluteFill, { backgroundColor: 'rgba(0, 0, 0, 0.3)' },]}>
@@ -125,9 +125,9 @@ export default function EditModal({ navigation, route }) {
         <Text style={{ textAlign: 'center' }}>edit modal</Text>
         <Text>
           {content.map((word, idx) => {
-            if(JSON.stringify(word).match(/\s+/g)){
+            if(word.match(/\n+/g)){
               return (
-                <Text>
+                <Text key={idx + 10}>
                 {word}
                 </Text>
               );

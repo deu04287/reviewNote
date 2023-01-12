@@ -18,7 +18,7 @@ import ReviewPage from './src/ReviewPage';
 // import AlarmModal from './AlarmModal';
 
 // import TimeSettingPage from './TimeSettingPage';
-// import Test from './Test';
+import Test from './Test';
 
 import * as Notifications from 'expo-notifications';
 
@@ -39,6 +39,7 @@ export default function App() {
   return (
       <NavigationContainer>
       <Stack.Navigator  screenOptions={{headerShown: false, animation: 'none'  }}>
+        {/* <Stack.Screen name="Test" component={Test} /> */}
         <Stack.Screen name="Home" component={Home} />
         <Stack.Screen name="WritePage" component={WritePage} />
         <Stack.Screen name="EditPage" component={EditPage} />
@@ -46,7 +47,6 @@ export default function App() {
 
         {/* <Stack.Screen name="TimeSettingPage" component={TimeSettingPage} /> */}
         
-        {/* <Stack.Screen name="Test" component={Test} /> */}
       <Stack.Group >
         <Stack.Screen name="WriteModal" component={WriteModal} options={{ presentation: 'transparentModal' }} />
         <Stack.Screen name="EditModal" component={EditModal} options={{ presentation: 'transparentModal' }} />
