@@ -172,7 +172,7 @@ export default function Home({ navigation }) {
     return (
         <View style={styles.main}>
             <StatusBar backgroundColor={"white"} barStyle={"dark-content"} />
-                <ScrollView>
+                <ScrollView overScrollMode="never">
             <View style={{ marginTop: 4, marginBottom: 4 }}>
 
                 <TouchableOpacity style={styles.addButton}

@@ -69,7 +69,7 @@ export default function WritePage({ navigation }) {
           }} />
       </View>
       <View style={styles.viewContent}>
-        <ScrollView >
+        <ScrollView overScrollMode="never">
           <TextInput ref={ref_content}
             placeholderTextColor="#0005"
             multiline value={content} placeholder='내용' onChange={(e) => {

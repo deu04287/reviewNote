@@ -110,7 +110,7 @@ export default function WriteModal({ navigation, route }) {
         { backgroundColor: 'rgba(0, 0, 0, 0.3)' },
       ]}>
         <View style={{ width: '95%', height: '95%', position: 'absolute', top: '2.5%', left: '2.5%', backgroundColor: 'white', borderRadius: 10 }}>
-        <ScrollView>
+        <ScrollView overScrollMode="never">
           <Text style={{ textAlign: 'center' }}>write modal</Text>
           
           <Text>

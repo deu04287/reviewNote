@@ -51,7 +51,26 @@ export default function EditPage({ navigation, route }) {
 
     const ref_content = useRef();
 
+    useEffect(
+        () =>
+          navigation.addListener('beforeRemove', (e) => {
+            e.preventDefault();
+            // console.log("아마 뒤로이동할때 뜨는거");
+          }),
+        [navigation]
+      );
     useEffect(() => {
+        const hideSubscription = Keyboard.addListener('keyboardDidHide', () => {
+            console.log("키보드 사라짐~");
+            console.log(toggle_text_or_textinput);
+            console.log(toggle_text_or_textinput2);
+            if(toggle_text_or_textinput === undefined && toggle_text_or_textinput2 === 0){
+                setToggle_text_or_textinput2(0); 
+                setToggle_text_or_textinput(undefined);
+                console.log("bold text off상태고 textinput on 상태 왜 안나와");
+            }
+          });
+
         AsyncStorage.getItem(route.params.bold, (err, result) => {
             if (!err) {
                 setBoldList(JSON.parse(result).boldList);
@@ -72,7 +91,7 @@ export default function EditPage({ navigation, route }) {
                 <TextInput
                     style={{ fontSize: 20, }}
                     placeholderTextColor="#0005"
-                    onBlur={() => ref_content.current.focus()} maxLength={42} placeholder='제목' value={title} onChange={(e) => {
+                    maxLength={42} placeholder='제목' value={title} onChange={(e) => {
                         e.preventDefault();
                         const { eventCount, target, text } = e.nativeEvent;
                         setTitle(text);
@@ -80,15 +99,15 @@ export default function EditPage({ navigation, route }) {
             </View>
             <View style={styles.viewContent}>
                 
-            <Pressable onPress={() => { 
+            <Pressable onPress ={() => { 
                 Keyboard.dismiss();
                 setToggle_text_or_textinput(0); 
                 setToggle_text_or_textinput2(undefined);
-                // ref_content.current.focus();
+                // ref_content
                         
                     }}>
             <View style={{height:toggle_text_or_textinput}}>
-                <ScrollView >
+                <ScrollView overScrollMode="never">
 
                             <Text >
                                 {content.map((word, idx) => (
@@ -102,7 +121,7 @@ export default function EditPage({ navigation, route }) {
                     </Pressable>
                 
                 <View style={{ width:toggle_text_or_textinput2}}>
-                <ScrollView >
+                <ScrollView overScrollMode="never">
 
                             <TextInput
                                 style={{fontSize:17,}}

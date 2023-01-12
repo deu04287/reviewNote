@@ -64,7 +64,7 @@ export default function ReviewPage({ navigation, route }) {
             <StatusBar backgroundColor={"white"} barStyle={"dark-content"} />
             {data ?
                 <View>
-                    <ScrollView>
+                    <ScrollView overScrollMode="never">
                     {/* <Text>{JSON.stringify(content)}</Text>
                     <Text>boldList:{JSON.stringify(boldList)}</Text> */}
                     <Text>
