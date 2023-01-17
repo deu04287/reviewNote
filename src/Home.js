@@ -1,6 +1,6 @@
-import { ScrollView, TouchableOpacity,RefreshControl, Button, Modal, StyleSheet, Text, View, StatusBar, Pressable } from 'react-native';
+import { ScrollView, TouchableOpacity, Alert,RefreshControl, Button, Modal, StyleSheet, Text, View, StatusBar, Pressable } from 'react-native';
 import { Dimensions } from 'react-native'; //나중에 전역변수로 바꾸기
-import React, { useState, useEffect,useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import getTime from '../functions/getTime';
 import { Switch } from 'react-native';
@@ -32,10 +32,10 @@ export default function Home({ navigation }) {
     const [refreshing, setRefreshing] = React.useState(false);
 
     const onRefresh = useCallback(() => {
-      setCurrentTime2(getTime());
-      setTimeout(() => {
-        setRefreshing(false);
-      }, 2000);
+        setCurrentTime2(getTime());
+        setTimeout(() => {
+            setRefreshing(false);
+        }, 2000);
     }, []);
 
     const [notificationPermissionToken, setNotificationPermissionToken] = useState('');
@@ -50,7 +50,7 @@ export default function Home({ navigation }) {
             finalStatus = status;
         }
         token = finalStatus;
-        console.log(token);
+        console.log("토큰:"+token);
         if (Platform.OS === 'android') {
             Notifications.setNotificationChannelAsync('default', {
                 name: 'default',
@@ -64,12 +64,12 @@ export default function Home({ navigation }) {
 
     useEffect(() => {
         // Notifications.requestPermissionsAsync();
-        setNotificationPermissionToken(registerForPushNotificationsAsync()); 
-        
+        setNotificationPermissionToken(registerForPushNotificationsAsync());
+
         Notifications.addNotificationResponseReceivedListener(response => {
             // console.log(response.notification.request.content.data);
-            navigation.navigate('ReviewPage',{data : response.notification.request.content.data});
-          });
+            navigation.navigate('ReviewPage', { data: response.notification.request.content.data });
+        });
 
         AsyncStorage.getAllKeys((err, result) => {
             if (!err) setStore(result.reverse());
@@ -99,12 +99,12 @@ export default function Home({ navigation }) {
         const [isOn, setIsOn] = useState(false);
         const [innerSecond, setInnerSecond] = useState(props.number["whenAlarm"]);
         const [turnOFFAfterTime, setTurnOFFAfterTime] = useState(getEndTime(props.number['time'], Number(props.number["whenAlarm"])));
-        
+
         const [innerEndTime, setInnerEndTime] = useState(props.number["endTime"]);
         const [innerBoldList, setInnerBoldList] = useState([]);
-    
 
-        
+
+
         useEffect(() => {
             if (props.onOff === 0)
                 setIsOn(false);
@@ -117,12 +117,12 @@ export default function Home({ navigation }) {
             }
         }, []);
         useEffect(() => {
-            AsyncStorage.getItem(JSON.stringify(props.number) , (err, result) => {
+            AsyncStorage.getItem(JSON.stringify(props.number), (err, result) => {
                 if (result) {
                     // console.log(JSON.parse(result)["boldList"]);
                     setInnerBoldList(JSON.parse(result)["boldList"]);
                 }
-                else console.log(err);
+                else console.log("리스트불러오기error");
             });
         }, []);
 
@@ -144,16 +144,16 @@ export default function Home({ navigation }) {
                             }
                             else {
                                 // console.log(props.number);
-                                setInnerEndTime(getEndTime(getTime(),innerSecond));
-                                
+                                setInnerEndTime(getEndTime(getTime(), innerSecond));
+
 
                                 Notifications.scheduleNotificationAsync({
                                     content: {
                                         title: props.number["title"],
                                         body: 'Change sides!',
-                                        sticky:true,
-                                        data: {strData: JSON.stringify({  title: props.number["title"], content: props.number["content"] }), strBoldList: JSON.stringify({ boldList: innerBoldList })}
-                                        
+                                        sticky: true,
+                                        data: { strData: JSON.stringify({ title: props.number["title"], content: props.number["content"] }), strBoldList: JSON.stringify({ boldList: innerBoldList }) }
+
                                     },
                                     identifier: props.number["time"],
                                     trigger: {
@@ -181,26 +181,26 @@ export default function Home({ navigation }) {
     return (
         <View style={styles.main}>
             <StatusBar backgroundColor={"white"} barStyle={"dark-content"} />
-                <ScrollView overScrollMode="never"
+            <ScrollView overScrollMode="never"
                 refreshControl={
                     <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-                  }
-                >
-            <View style={{ marginTop: 4, marginBottom: 4 }}>
+                }
+            >
+                <View style={{ marginTop: 4, marginBottom: 4 }}>
 
-                <TouchableOpacity style={styles.addButton}
-                    onPress={() => {
-                        navigation.navigate('WritePage');
-                    }}><Text style={styles.addText}>+</Text></TouchableOpacity>
-                {/* <Button title='전체 알림 리스트 가져오기' onPress={async() => {
+                    <TouchableOpacity style={styles.addButton}
+                        onPress={() => {
+                            navigation.navigate('WritePage');
+                        }}><Text style={styles.addText}>+</Text></TouchableOpacity>
+                    {/* <Button title='전체 알림 리스트 가져오기' onPress={async() => {
                     try {
                         let ggg = await Notifications.getAllScheduledNotificationsAsync();
                         console.log(ggg);
                     } catch (e) {
-                        console.log("error");
+                        console.log("전체알림error");
                     }
                 }}/> */}
-                {/* <Button title='알림 전체 취소하기' onPress={async() => {
+                    {/* <Button title='알림 전체 취소하기' onPress={async() => {
                     try {
                         Notifications.cancelAllScheduledNotificationsAsync();
                         
@@ -208,7 +208,7 @@ export default function Home({ navigation }) {
                         console.log("error");
                     }
                 }}/> */}
-            </View>
+                </View>
                 {store.map((number, idx) =>
                     <Pressable
                         key={idx + 10}
@@ -217,9 +217,27 @@ export default function Home({ navigation }) {
                         }}
                         onLongPress={() => {
                             setTmpArticle(JSON.stringify(number));
-                            setVisibleModal(!visibleModal);
+                            Alert.alert("삭제하겠습니까?","", [
+                                {
+                                  text: "취소",
+                                  onPress: () => null,
+                                  style: "cancel"
+                                }
+                                ,{ text: "확인", onPress: () => {
+                                    Notifications.cancelScheduledNotificationAsync(JSON.parse(number)["time"]);
+                                    AsyncStorage.removeItem(number).then(
+                                        AsyncStorage.getAllKeys((err, result) => {
+                                            if (!err) setStore(result.reverse());
+                                        }).then(
+                                            setCurrentTime2(getTime())
+                                        )
+                                    )
+                                } }
+                              ]);
+                            
+                            // setVisibleModal(!visibleModal);
                         }}
-                        style={({  pressed }) => [
+                        style={({ pressed }) => [
                             {
                                 backgroundColor: pressed
                                     ? '#DDD'
@@ -243,8 +261,7 @@ export default function Home({ navigation }) {
                     </Pressable>
                 )}
             </ScrollView>
-
-            <Modal
+            {/* <Modal
                 animationType="none"
                 transparent={true}
                 visible={visibleModal}
@@ -252,32 +269,29 @@ export default function Home({ navigation }) {
             >
                 <View style={[
                     StyleSheet.absoluteFill,
-                    { backgroundColor: 'rgba(0, 0, 0, 0.3)',justifyContent:'center',alignItems:'center' },
+                    { backgroundColor: 'rgba(0, 0, 0, 0.3)', justifyContent: 'center', alignItems: 'center' },
                 ]}>
                     <View style={{ width: '30%', height: '30%', backgroundColor: 'white', borderRadius: 10 }}>
                         <View>
-                        <Pressable
-                            style={styles.container}
-                            onPress={() => {
-                                
-                                Notifications.cancelScheduledNotificationAsync(JSON.parse(JSON.parse(tmpArticle))["time"]);
-                                AsyncStorage.removeItem(JSON.parse(tmpArticle)).then(
-                                    AsyncStorage.getAllKeys((err, result) => {
-                                        if (!err) setStore(result.reverse());
-                                    }).then(
-                                        setVisibleModal(!visibleModal)
+                            <Pressable
+                                style={styles.container}
+                                onPress={() => {
+                                    Notifications.cancelScheduledNotificationAsync(JSON.parse(JSON.parse(tmpArticle))["time"]);
+                                    AsyncStorage.removeItem(JSON.parse(tmpArticle)).then(
+                                        AsyncStorage.getAllKeys((err, result) => {
+                                            if (!err) setStore(result.reverse());
+                                        }).then(
+                                            setVisibleModal(!visibleModal)
+                                        )
                                     )
-                                )
-
-                                
-                            }}
-                        >
-                            <Text>delete</Text>
-                        </Pressable>
-                    </View>
+                                }}
+                            >
+                                <Text>delete</Text>
+                            </Pressable>
+                        </View>
                     </View>
                 </View>
-            </Modal>
+            </Modal> */}
         </View>
     );
 }

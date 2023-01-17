@@ -187,7 +187,7 @@ export default function EditPage({ navigation, route }) {
                         Keyboard.dismiss();
                         navigation.navigate('EditModal', { time: route.params.time, retitle: title, title: route.params.title, content: route.params.content, recontent: JSON.stringify(parseContent.split(/(\s+)/)), whenAlarm: whenAlarm, endTime: endTime, boldList: boldList, tmpBoldList: tmpBoldList });
                     }
-                }}><Text style={{ textAlign: 'center', color: 'white' }}>저장</Text></TouchableOpacity>
+                }}><Text style={{ textAlign: 'center', color: 'white' }}>핵심단어 & 복습알람 설정</Text></TouchableOpacity>
         </View>
         // <Pressable onPress={() => { setToggle_text_or_textinput(!toggle_text_or_textinput);  }}>
         //     {toggle_text_or_textinput ?

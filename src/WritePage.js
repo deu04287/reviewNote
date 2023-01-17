@@ -110,7 +110,7 @@ export default function WritePage({ navigation }) {
             navigation.navigate('WriteModal', { time: getTime(), title: title, content: JSON.stringify(content.split(/(\s+)/)), whenAlarm: whenAlarm, boldList: boldList });
 
           }
-        }}><Text style={{ textAlign: 'center', color: 'white' }}>저장</Text></TouchableOpacity>
+        }}><Text style={{ textAlign: 'center', color: 'white' }}>핵심단어 & 복습알람 설정</Text></TouchableOpacity>
     </View>
   );
 }
