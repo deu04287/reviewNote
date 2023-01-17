@@ -252,10 +252,9 @@ export default function Home({ navigation }) {
             >
                 <View style={[
                     StyleSheet.absoluteFill,
-                    { backgroundColor: 'rgba(0, 0, 0, 0.3)' },
+                    { backgroundColor: 'rgba(0, 0, 0, 0.3)',justifyContent:'center',alignItems:'center' },
                 ]}>
-                    <View style={{ width: '95%', height: '95%', position: 'absolute', top: '2.5%', left: '2.5%', backgroundColor: 'white', borderRadius: 10 }}>
-                        <Text>sfasdff</Text>
+                    <View style={{ width: '30%', height: '30%', backgroundColor: 'white', borderRadius: 10 }}>
                         <View>
                         <Pressable
                             style={styles.container}

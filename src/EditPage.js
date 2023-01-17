@@ -71,45 +71,51 @@ export default function EditPage({ navigation, route }) {
 
       const backAction = () => {
         // e.preventDefault();
-        Alert.alert("되돌아가시겠습니까?", "변경사항이 저장되지 않습니다", [
-            {
-              text: "취소",
-              onPress: () => null,
-              style: "cancel"
-            }
-            ,{ text: "확인", onPress: () => navigation.goBack() }
-          ]);
+
+        console.log("paser"+parseContent);
+        // console.log();
+        
+        if(parseContent === route.params.content.join('')){
+            navigation.goBack();
+        } else{
+            Alert.alert("되돌아가시겠습니까?", "변경사항이 저장되지 않습니다", [
+                {
+                  text: "취소",
+                  onPress: () => null,
+                  style: "cancel"
+                }
+                ,{ text: "확인", onPress: () => navigation.goBack() }
+              ]);
+        }
         return true;
       };
     
       useEffect(() => {
+        
         BackHandler.addEventListener("hardwareBackPress", backAction);
+
+
     
         return () =>
           BackHandler.removeEventListener("hardwareBackPress", backAction);
-      }, []);
+      }, [parseContent]);
     useEffect(() => {
         const hideSubscription = Keyboard.addListener('keyboardDidHide', () => {
-            console.log("키보드 사라짐~");
-            console.log(toggle_text_or_textinput);
-            console.log(toggle_text_or_textinput2);
+            
             if(toggle_text_or_textinput === undefined && toggle_text_or_textinput2 === 0){
                 setToggle_text_or_textinput2(0); 
                 setToggle_text_or_textinput(undefined);
-                console.log("bold text off상태고 textinput on 상태 왜 안나와");
             }
           });
 
         AsyncStorage.getItem(route.params.bold, (err, result) => {
             if (!err) {
                 setBoldList(JSON.parse(result).boldList);
-                // console.log(result);
                 setTmpBoldList(JSON.parse(result).boldList);
             }
             else console.log("error");
         });
         setWhenAlarm(route.params.whenAlarm);
-        // console.log(boldList.filter((w) => w = w.trim()));
 
     }, []);
 
@@ -177,11 +183,9 @@ export default function EditPage({ navigation, route }) {
             <TouchableOpacity style={{ backgroundColor: '#525252', width: Dimensions.get('window').width, height: 50, justifyContent: 'center', alignContent: 'center', }}
                 onPress={() => {
                     if (title === '') {
-                        console.log("title empty");
                         showAlert('', '제목이 비어있습니다');
                     }
                     else if (content === '') {
-                        console.log("content empty");
                         showAlert('', '내용이 비어있습니다');
                     }
                     else {

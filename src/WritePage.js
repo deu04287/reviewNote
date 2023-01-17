@@ -48,14 +48,18 @@ export default function WritePage({ navigation }) {
 
   const backAction = () => {
     // e.preventDefault();
-    Alert.alert("되돌아가시겠습니까?", "변경사항이 저장되지 않습니다", [
-        {
-          text: "취소",
-          onPress: () => null,
-          style: "cancel"
-        }
-        ,{ text: "확인", onPress: () => navigation.goBack() }
-      ]);
+    if(!(content === '')){
+        Alert.alert("되돌아가시겠습니까?", "변경사항이 저장되지 않습니다", [
+            {
+              text: "취소",
+              onPress: () => null,
+              style: "cancel"
+            }
+            ,{ text: "확인", onPress: () => navigation.goBack() }
+          ]);
+    } else{
+        navigation.goBack();
+    }
     return true;
   };
 
