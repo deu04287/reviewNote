@@ -14,10 +14,10 @@ import { Switch } from 'react-native';
 
 
 export default function ReviewPage({ navigation, route }) {
-    const [data, setData] = useState(false);
+    const [data, setData] = useState(route.params.data);
 
-    const [boldList, setBoldList] = useState(false);
-    const [content, setContent] = useState(false);
+    const [boldList, setBoldList] = useState(JSON.parse(route.params.data["strBoldList"])["boldList"]);
+    const [content, setContent] = useState(JSON.parse(route.params.data["strData"])["content"] );
     const [clearList, setClearList] = useState([]);
     
     // JSON.parse(route.params.data)
@@ -35,13 +35,13 @@ export default function ReviewPage({ navigation, route }) {
     }, []);
     
     const backAction = () => {
-        Alert.alert("Hold on!", "Are you sure you want to go back?", [
+        Alert.alert("경고", "복습 완료전까지 나갈수 없습니다.", [
           {
-            text: "Cancel",
+            text: "확인",
             onPress: () => null,
             style: "cancel"
-          },
-          { text: "YES", onPress: () => BackHandler.exitApp() }
+          }
+        //   ,{ text: "YES", onPress: () => BackHandler.exitApp() }
         ]);
         return true;
       };
@@ -60,11 +60,13 @@ export default function ReviewPage({ navigation, route }) {
 
     return (
 
-        <View >
+        <View style={{flex:1}}>
             <StatusBar backgroundColor={"white"} barStyle={"dark-content"} />
-            {data ?
-                <View>
-                    <ScrollView overScrollMode="never">
+            <View style={{flex:1}}>
+            
+                    <ScrollView overScrollMode="never"
+                    contentContainerStyle={{paddingTop: 15, paddingRight: 15, paddingLeft: 15 }}
+                    >
                     {/* <Text>{JSON.stringify(content)}</Text>
                     <Text>boldList:{JSON.stringify(boldList)}</Text> */}
                     <Text>
@@ -73,31 +75,40 @@ export default function ReviewPage({ navigation, route }) {
                                         {boldList.includes(word)
                                         ?  
                                                 <Pressable  onPress={() => onPressWord(word)}>
-                                            <Text  style={{textDecorationLine: clearList.includes(word) ? 'line-through' : 'nomal', fontWeight: 'bold' }}>
+                                            <Text  style={{ fontSize: 17, textDecorationLine: clearList.includes(word) ? 'line-through' : 'nomal', fontWeight: '900' }}>
                                                 {word}
                                             </Text>
                                         </Pressable>
-                                         : <Text >{word}</Text>}
+                                         : <Text style={{ fontSize: 17,}}>{word}</Text>}
                                     </Text>
                         ))}
                     </Text>
-                    <Text>{JSON.stringify(clearList.length)}/{JSON.stringify(boldList.length)}</Text>
-
-                    <Button title='clear' onPress={
-                        () => {
-                            if(clearList.length == boldList.length){
-                                
-                                navigation.navigate('Home');
-                            } 
-                        }
-                    }></Button>
                     </ScrollView>
-                </View>
-                :
-                <View>
-                    <Text>error page</Text>
-                </View>
-            }
+            </View>
+            <View style={{alignItems:'flex-end'}}>
+            <Text style={{marginLeft:10,fontSize:20}}>{JSON.stringify(clearList.length)}/{JSON.stringify(boldList.length)} </Text>
+
+<TouchableOpacity 
+style={{ backgroundColor: '#525252', width: Dimensions.get('window').width, height: 50, justifyContent: 'center', alignContent: 'center', }}
+title='clear' onPress={
+    () => {
+        if(clearList.length == boldList.length){
+            
+            navigation.navigate('Home');
+        } 
+        else{
+            Alert.alert("경고", "복습 완료전까지 나갈수 없습니다. "+JSON.stringify(clearList.length)+"/"+JSON.stringify(boldList.length), [
+                {
+                  text: "확인",
+                  onPress: () => null,
+                  style: "cancel"
+                }
+              //   ,{ text: "YES", onPress: () => BackHandler.exitApp() }
+              ])
+        }
+    }
+}><Text style={{ textAlign: 'center', color: 'white' , fontSize:17}}>Clear</Text></TouchableOpacity>
+            </View>
         </View>
 
 

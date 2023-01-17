@@ -54,8 +54,9 @@ export default function EditPage({ navigation, route }) {
     useEffect(
         () =>
           navigation.addListener('beforeRemove', (e) => {
-            e.preventDefault();
+            // e.preventDefault();
             // console.log("아마 뒤로이동할때 뜨는거");
+            // 토글 1이 defined 면 뒤로가기 okay@!!!!!!!!!!!!!!
           }),
         [navigation]
       );
@@ -156,6 +157,7 @@ export default function EditPage({ navigation, route }) {
                         showAlert('', '내용이 비어있습니다');
                     }
                     else {
+                        Keyboard.dismiss();
                         navigation.navigate('EditModal', { time: route.params.time, retitle: title, title: route.params.title, content: route.params.content, recontent: JSON.stringify(parseContent.split(/(\s+)/)), whenAlarm: whenAlarm, endTime: endTime, boldList: boldList, tmpBoldList: tmpBoldList });
                     }
                 }}><Text style={{ textAlign: 'center', color: 'white' }}>저장</Text></TouchableOpacity>
@@ -207,7 +209,7 @@ const styles = StyleSheet.create({
         width: SCREEN_WIDTH,
         borderBottomColor: '#EEE', borderBottomWidth: 0.7,
         height: 55,
-        paddingLeft: 10, paddingRight: 10,
+        paddingLeft: 15, paddingRight: 10,
     },
     viewContent: {
         flex: 1,
@@ -215,7 +217,7 @@ const styles = StyleSheet.create({
         width: SCREEN_WIDTH,
         // height: SCREEN_HEIGHT/100*100,
         textAlignVertical: 'top',
-        paddingLeft: 10, paddingTop: 10, paddingRight: 10,
+        paddingLeft: 15, paddingTop: 15, paddingRight: 10,
     },
     buttonSave: {
 

@@ -1,5 +1,5 @@
 // import { StatusBar } from 'expo-status-bar';
-import { Alert, ScrollView, Modal, Pressable, Button, KeyboardAvoidingView, StyleSheet, Text, View, StatusBar, TextInput, TouchableOpacity } from 'react-native';
+import { Alert, ScrollView, Modal, Pressable,Keyboard, Button, KeyboardAvoidingView, StyleSheet, Text, View, StatusBar, TextInput, TouchableOpacity } from 'react-native';
 import React, { useState, useEffect, useContext, useRef } from 'react';
 import { Dimensions } from 'react-native';//나중에 전역변수로 바꾸기
 
@@ -71,6 +71,7 @@ export default function WritePage({ navigation }) {
       <View style={styles.viewContent}>
         <ScrollView overScrollMode="never">
           <TextInput ref={ref_content}
+          style={{ fontSize:17}}
             placeholderTextColor="#0005"
             multiline value={content} placeholder='내용' onChange={(e) => {
               e.preventDefault();
@@ -90,7 +91,7 @@ export default function WritePage({ navigation }) {
             showAlert('', '내용이 비어있습니다');
           }
           else {
-
+            Keyboard.dismiss();
             navigation.navigate('WriteModal', { time: getTime(), title: title, content: JSON.stringify(content.split(/(\s+)/)), whenAlarm: whenAlarm, boldList: boldList });
 
           }
@@ -112,13 +113,12 @@ const styles = StyleSheet.create({
   },
   viewTitle: {
     // flex:1,
-
     justifyContent: 'center',
     backgroundColor: 'white',
     width: SCREEN_WIDTH,
     borderBottomColor: '#EEE', borderBottomWidth: 0.7,
     height: 50,
-    paddingLeft: 10, paddingRight: 10,
+    paddingLeft: 15, paddingRight: 10,
   },
   viewContent: {
     flex: 1,
@@ -126,7 +126,7 @@ const styles = StyleSheet.create({
     width: SCREEN_WIDTH,
     // height: SCREEN_HEIGHT/100*100,
     textAlignVertical: 'top',
-    paddingLeft: 10, paddingTop: 10, paddingRight: 10,
+    paddingLeft: 15, paddingTop: 15, paddingRight: 10,
   },
   buttonSave: {
 

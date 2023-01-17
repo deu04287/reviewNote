@@ -1,6 +1,6 @@
-import { ScrollView, TouchableOpacity, Button, Modal, StyleSheet, Text, View, StatusBar, Pressable } from 'react-native';
+import { ScrollView, TouchableOpacity,RefreshControl, Button, Modal, StyleSheet, Text, View, StatusBar, Pressable } from 'react-native';
 import { Dimensions } from 'react-native'; //나중에 전역변수로 바꾸기
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect,useCallback } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import getTime from '../functions/getTime';
 import { Switch } from 'react-native';
@@ -28,6 +28,15 @@ export default function Home({ navigation }) {
     const [visibleModal, setVisibleModal] = useState(false);
     const [tmpArticle, setTmpArticle] = useState();
     const [currentTime2, setCurrentTime2] = useState(getTime());
+
+    const [refreshing, setRefreshing] = React.useState(false);
+
+    const onRefresh = useCallback(() => {
+      setCurrentTime2(getTime());
+      setTimeout(() => {
+        setRefreshing(false);
+      }, 2000);
+    }, []);
 
     const [notificationPermissionToken, setNotificationPermissionToken] = useState('');
 
@@ -172,7 +181,11 @@ export default function Home({ navigation }) {
     return (
         <View style={styles.main}>
             <StatusBar backgroundColor={"white"} barStyle={"dark-content"} />
-                <ScrollView overScrollMode="never">
+                <ScrollView overScrollMode="never"
+                refreshControl={
+                    <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+                  }
+                >
             <View style={{ marginTop: 4, marginBottom: 4 }}>
 
                 <TouchableOpacity style={styles.addButton}
@@ -326,7 +339,7 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.22,
         shadowRadius: 2.22,
 
-        elevation: 8,
+        elevation: 30,
     },
     addText: {
         fontSize: 33,
