@@ -70,11 +70,6 @@ export default function EditPage({ navigation, route }) {
     //   );
 
       const backAction = () => {
-        // e.preventDefault();
-
-        console.log("paser"+parseContent);
-        // console.log();
-        
         if(parseContent === route.params.content.join('')){
             navigation.goBack();
         } else{

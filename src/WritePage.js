@@ -48,7 +48,7 @@ export default function WritePage({ navigation }) {
 
   const backAction = () => {
     // e.preventDefault();
-    if(!(content === '')){
+    if(!(content === '' && title === '')){
         Alert.alert("되돌아가시겠습니까?", "변경사항이 저장되지 않습니다", [
             {
               text: "취소",
@@ -68,7 +68,7 @@ export default function WritePage({ navigation }) {
 
     return () =>
       BackHandler.removeEventListener("hardwareBackPress", backAction);
-  }, []);
+  }, [content, title]);
 
   return (
     <View style={styles.viewMain}>
