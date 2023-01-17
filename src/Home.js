@@ -119,7 +119,7 @@ export default function Home({ navigation }) {
         useEffect(() => {
             AsyncStorage.getItem(JSON.stringify(props.number), (err, result) => {
                 if (result) {
-                    // console.log(JSON.parse(result)["boldList"]);
+
                     setInnerBoldList(JSON.parse(result)["boldList"]);
                 }
                 else console.log("리스트불러오기error");
