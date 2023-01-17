@@ -1,5 +1,5 @@
 // import { StatusBar } from 'expo-status-bar';
-import { Alert, ScrollView, Modal, Pressable,Keyboard, Button, KeyboardAvoidingView, StyleSheet, Text, View, StatusBar, TextInput, TouchableOpacity } from 'react-native';
+import { Alert, BackHandler,ScrollView, Modal, Pressable,Keyboard, Button, KeyboardAvoidingView, StyleSheet, Text, View, StatusBar, TextInput, TouchableOpacity } from 'react-native';
 import React, { useState, useEffect, useContext, useRef } from 'react';
 import { Dimensions } from 'react-native';//나중에 전역변수로 바꾸기
 
@@ -46,14 +46,25 @@ export default function WritePage({ navigation }) {
 
   const ref_content = useRef();
 
-  useEffect(
-    () =>
-      navigation.addListener('beforeRemove', (e) => {
-        // e.preventDefault();
-        console.log("아마 뒤로이동할때 뜨는거");
-      }),
-    [navigation]
-  );
+  const backAction = () => {
+    // e.preventDefault();
+    Alert.alert("되돌아가시겠습니까?", "변경사항이 저장되지 않습니다", [
+        {
+          text: "취소",
+          onPress: () => null,
+          style: "cancel"
+        }
+        ,{ text: "확인", onPress: () => navigation.goBack() }
+      ]);
+    return true;
+  };
+
+  useEffect(() => {
+    BackHandler.addEventListener("hardwareBackPress", backAction);
+
+    return () =>
+      BackHandler.removeEventListener("hardwareBackPress", backAction);
+  }, []);
 
   return (
     <View style={styles.viewMain}>

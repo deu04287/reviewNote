@@ -1,5 +1,5 @@
 // import { StatusBar } from 'expo-status-bar';
-import { Button, Modal, StyleSheet, Text, View, ScrollView,Keyboard, Pressable, StatusBar, TextInput, TouchableOpacity } from 'react-native';
+import { Button, Modal, StyleSheet, Text,Alert,BackHandler, View, ScrollView,Keyboard, Pressable, StatusBar, TextInput, TouchableOpacity } from 'react-native';
 import React, { useState, useEffect, useContext, useRef } from 'react';
 import { Dimensions } from 'react-native'; //나중에 전역변수로 바꾸기
 
@@ -51,15 +51,43 @@ export default function EditPage({ navigation, route }) {
 
     const ref_content = useRef();
 
-    useEffect(
-        () =>
-          navigation.addListener('beforeRemove', (e) => {
-            // e.preventDefault();
-            // console.log("아마 뒤로이동할때 뜨는거");
-            // 토글 1이 defined 면 뒤로가기 okay@!!!!!!!!!!!!!!
-          }),
-        [navigation]
-      );
+    // useEffect(
+    //     () =>
+    //       navigation.addListener('beforeRemove', (e) => {
+    //         e.preventDefault();
+    //         Alert.alert("되돌아가시겠습니까?", "변경사항이 저장되지 않습니다", [
+    //             {
+    //               text: "취소",
+    //               onPress: () => null,
+    //               style: "cancel"
+    //             }
+    //             ,{ text: "확인", onPress: () => navigation.goBack() }
+    //           ]);
+    //         // console.log("아마 뒤로이동할때 뜨는거");
+    //         // 토글 1이 defined 면 뒤로가기 okay@!!!!!!!!!!!!!!
+    //       }),
+    //     [navigation]
+    //   );
+
+      const backAction = () => {
+        // e.preventDefault();
+        Alert.alert("되돌아가시겠습니까?", "변경사항이 저장되지 않습니다", [
+            {
+              text: "취소",
+              onPress: () => null,
+              style: "cancel"
+            }
+            ,{ text: "확인", onPress: () => navigation.goBack() }
+          ]);
+        return true;
+      };
+    
+      useEffect(() => {
+        BackHandler.addEventListener("hardwareBackPress", backAction);
+    
+        return () =>
+          BackHandler.removeEventListener("hardwareBackPress", backAction);
+      }, []);
     useEffect(() => {
         const hideSubscription = Keyboard.addListener('keyboardDidHide', () => {
             console.log("키보드 사라짐~");
